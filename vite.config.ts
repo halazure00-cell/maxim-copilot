@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}'],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*$/i,

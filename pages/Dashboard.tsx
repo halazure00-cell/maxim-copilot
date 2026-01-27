@@ -1,9 +1,10 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { Profile, Transaksi } from '../types';
 import { TrendingUp, Wallet, AlertTriangle, ChevronRight, MapPin } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { ZoneMap } from '../components/ZoneMap';
 import { getCurrentStrategy, STRATEGY_LABELS } from '../services/schedule';
+
+const ZoneMap = lazy(() => import('../components/ZoneMap'));
 
 interface DashboardProps {
   profile: Profile;
@@ -126,7 +127,21 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
       </div>
 
       <div className="h-72 w-full rounded-2xl overflow-hidden border border-brand-gray shadow-lg relative">
-        <ZoneMap />
+        <Suspense
+          fallback={
+            <div className="flex h-full w-full items-center justify-center bg-brand-surface">
+              <div className="flex items-center gap-3 text-brand-yellow" role="status" aria-live="polite">
+                <div
+                  className="h-8 w-8 animate-spin rounded-full border-2 border-brand-yellow border-t-transparent"
+                  aria-hidden="true"
+                ></div>
+                <span className="text-sm font-semibold text-white">Memuat peta...</span>
+              </div>
+            </div>
+          }
+        >
+          <ZoneMap />
+        </Suspense>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
