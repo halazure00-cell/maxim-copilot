@@ -17,10 +17,11 @@ const iconDefaultProto = L.Icon.Default.prototype as L.Icon.Default & {
   _getIconUrl?: () => string;
 };
 delete iconDefaultProto._getIconUrl;
+const leafletBaseUrl = import.meta.env.BASE_URL;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/images/marker-icon-2x.png',
-  iconUrl: '/images/marker-icon.png',
-  shadowUrl: '/images/marker-shadow.png',
+  iconRetinaUrl: `${leafletBaseUrl}images/marker-icon-2x.png`,
+  iconUrl: `${leafletBaseUrl}images/marker-icon.png`,
+  shadowUrl: `${leafletBaseUrl}images/marker-shadow.png`,
 });
 
 // --- 1b. Avoid Chrome warning on non-cancelable touchmove events ---
