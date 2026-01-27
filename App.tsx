@@ -60,18 +60,22 @@ function App() {
 
   return (
     <>
-      <Toaster 
+      <Toaster
         position="top-center"
         toastOptions={{
-          style: {
-            background: '#333',
-            color: '#fff',
-            borderRadius: '12px',
-          },
+          className: 'bg-[#1f1f1f] text-white font-bold border border-zinc-600 shadow-lg',
           success: {
+            className: 'bg-[#1f1f1f] text-white font-bold border border-green-500 shadow-lg',
             iconTheme: {
-              primary: '#FEEC00', // Maxim Yellow
-              secondary: '#121212',
+              primary: '#22c55e',
+              secondary: '#1f1f1f',
+            },
+          },
+          error: {
+            className: 'bg-[#1f1f1f] text-white font-bold border border-red-500 shadow-lg',
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#1f1f1f',
             },
           },
         }}

@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { toast } from 'react-hot-toast';
 import { Profile, Transaksi } from '../types';
 import { TrendingUp, Wallet, AlertTriangle, ChevronRight, MapPin } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
@@ -157,7 +158,7 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
         </div>
         
         <button 
-          onClick={() => alert(`SOS Dikirim ke ${profile.nomor_darurat}`)}
+          onClick={() => toast.success(`SOS Dikirim ke ${profile.nomor_darurat}`, { duration: 4000 })}
           className="bg-red-500/10 p-4 rounded-xl border border-red-500/30 shadow-md active:bg-red-500/20 transition-colors text-left"
         >
            <div className="flex items-start justify-between">
