@@ -4,19 +4,31 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // --- 1. Fix Leaflet Default Icon ---
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-
-let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
+// We reference the images from the public folder now
+const iconDefaultProto = L.Icon.Default.prototype as L.Icon.Default & {
+  _getIconUrl?: () => string;
+};
+delete iconDefaultProto._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: '/images/marker-icon-2x.png',
+  iconUrl: '/images/marker-icon.png',
+  shadowUrl: '/images/marker-shadow.png',
 });
 
-L.Marker.prototype.options.icon = DefaultIcon;
-
-// --- 2. Zone Configuration (Bandung) ---
+// --- 1b. Avoid Chrome warning on non-cancelable touchmove events ---
+const domEventAny = L.DomEvent as typeof L.DomEvent & {
+  __maximPreventDefaultPatched?: boolean;
+};
+if (!domEventAny.__maximPreventDefaultPatched) {
+  const originalPreventDefault = domEventAny.preventDefault;
+  domEventAny.preventDefault = function (this: typeof L.DomEvent, e: Event) {
+    if (e.cancelable) {
+      return originalPreventDefault.call(this, e);
+    }
+    return this;
+  };
+  domEventAny.__maximPreventDefaultPatched = true;
+}
 const ZONES = [
   {
     id: 1,
@@ -91,7 +103,8 @@ export const ZoneMap: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden relative shadow-inner border border-brand-gray/50">
+    // UPDATED: Added min-h-[50vh] as insurance policy against collapse
+    <div className="w-full h-full min-h-[50vh] rounded-2xl overflow-hidden relative shadow-inner border border-brand-gray/50 isolate">
       {/* --- 4. Dark Mode Style Injection --- */}
       <style>
         {`
@@ -155,7 +168,7 @@ export const ZoneMap: React.FC = () => {
       </MapContainer>
 
       {/* Overlay Info */}
-      <div className="absolute top-4 right-4 z-[400] bg-black/70 backdrop-blur-md p-2 rounded-lg border border-white/10">
+      <div className="absolute top-4 right-4 z-[400] bg-black/70 backdrop-blur-md p-2 rounded-lg border border-white/10 pointer-events-none">
         <div className="flex flex-col space-y-2">
           {ZONES.map(z => (
             <div key={z.id} className="flex items-center text-[10px] text-white">
@@ -168,3 +181,5 @@ export const ZoneMap: React.FC = () => {
     </div>
   );
 };
+
+export default ZoneMap;

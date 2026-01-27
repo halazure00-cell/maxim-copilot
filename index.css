@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Paksa HTML, Body, dan Root agar Full Screen (PENTING) */
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Mencegah scroll ganda di HP */
+}
+
+/* 2. Paksa Leaflet Container agar mengikuti induknya */
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    touch-action: none; /* Let Leaflet fully manage touch gestures */
+}
+
+/* 3. Dark Mode Map Filter (Dipertahankan) */
+.dark-map-tiles {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* 4. Fix Popup Color */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: #1E1E1E;
+    color: white;
+    border: 1px solid #333;
+}
