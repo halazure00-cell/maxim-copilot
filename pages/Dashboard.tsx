@@ -1,8 +1,9 @@
-import React from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { Profile, Transaksi } from '../types';
 import { TrendingUp, Wallet, AlertTriangle, ChevronRight, MapPin } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { ZoneMap } from '../components/ZoneMap';
+import { getCurrentStrategy, STRATEGY_LABELS } from '../services/schedule';
 
 interface DashboardProps {
   profile: Profile;
@@ -11,20 +12,34 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
-  // Hitung pendapatan hari ini (filter tipe 'masuk' dan tanggal hari ini)
-  const today = new Date().toDateString();
-  const pendapatanHariIni = transaksi
-    .filter(t => t.tipe === 'masuk' && new Date(t.created_at).toDateString() === today)
-    .reduce((acc, curr) => acc + curr.jumlah, 0);
+  const [now, setNow] = useState(() => new Date());
 
-  const persentaseTarget = profile.target_harian > 0 
-    ? Math.min(100, Math.round((pendapatanHariIni / profile.target_harian) * 100))
-    : 0;
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
 
-  const dataChart = [
+  const todayKey = useMemo(() => now.toDateString(), [now]);
+
+  const pendapatanHariIni = useMemo(() => {
+    return transaksi
+      .filter(t => t.tipe === 'masuk' && new Date(t.created_at).toDateString() === todayKey)
+      .reduce((acc, curr) => acc + curr.jumlah, 0);
+  }, [transaksi, todayKey]);
+
+  const persentaseTarget = useMemo(() => {
+    return profile.target_harian > 0 
+      ? Math.min(100, Math.round((pendapatanHariIni / profile.target_harian) * 100))
+      : 0;
+  }, [pendapatanHariIni, profile.target_harian]);
+
+  const dataChart = useMemo(() => ([
     { name: 'Selesai', value: pendapatanHariIni },
     { name: 'Sisa', value: Math.max(0, profile.target_harian - pendapatanHariIni) },
-  ];
+  ]), [pendapatanHariIni, profile.target_harian]);
+
+  const currentStrategy = useMemo(() => getCurrentStrategy(now), [now]);
+  const strategyLabel = STRATEGY_LABELS[currentStrategy];
 
   const CHART_COLORS = ['#FFCC00', '#2A2A2A'];
 
@@ -38,7 +53,6 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Greeting Card */}
       <div className="bg-gradient-to-br from-brand-surface to-brand-gray p-5 rounded-2xl border border-brand-gray shadow-lg relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <MapPin size={80} />
@@ -56,14 +70,19 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
         </div>
       </div>
 
-      {/* Strategy Card / Target Harian Section */}
       <div className="bg-brand-surface p-5 rounded-2xl border border-brand-gray shadow-lg">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-bold flex items-center">
             <TrendingUp className="text-brand-yellow mr-2" size={20} />
             Target Harian
           </h3>
           <span className="text-sm text-gray-400">{persentaseTarget}% Tercapai</span>
+        </div>
+
+        <div className="mb-3">
+          <span className="inline-flex items-center rounded-full bg-brand-gray px-2 py-1 text-[10px] font-semibold text-gray-200">
+            Strategi Aktif: {strategyLabel}
+          </span>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -106,12 +125,10 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
         </div>
       </div>
 
-      {/* Zone Map Section */}
       <div className="h-72 w-full rounded-2xl overflow-hidden border border-brand-gray shadow-lg relative">
         <ZoneMap />
       </div>
 
-      {/* Stats Grid / Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-brand-surface p-4 rounded-xl border border-brand-gray shadow-md">
            <div className="flex items-start justify-between">
@@ -139,7 +156,6 @@ const Dashboard: React.FC<DashboardProps> = ({ profile, transaksi }) => {
         </button>
       </div>
 
-      {/* Recent Activity Mini List */}
       <div className="pt-2">
         <div className="flex justify-between items-center mb-3">
           <h3 className="font-bold text-gray-200">Aktivitas Terakhir</h3>

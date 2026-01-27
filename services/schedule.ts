@@ -1,15 +1,27 @@
-export type Strategy = 'maxim_morning' | 'shopee_noon' | 'maxim_evening' | 'off';
+﻿export type Strategy = 'maxim_morning' | 'shopee_noon' | 'maxim_evening' | 'off';
 
-const SCHEDULE = [
-  { start: 5 * 60, end: 10 * 60, strategy: 'maxim_morning' },
-  { start: 10 * 60, end: 16 * 60, strategy: 'shopee_noon' },
-  { start: 16 * 60, end: 22 * 60, strategy: 'maxim_evening' }
-] as const;
+type ScheduleSlot = { start: number; end: number; strategy: Strategy };
+
+const SCHEDULE: ScheduleSlot[] = [
+  { start: 5 * 3600, end: 10 * 3600, strategy: 'maxim_morning' },
+  { start: 10 * 3600, end: 16 * 3600, strategy: 'shopee_noon' },
+  { start: 16 * 3600, end: 22 * 3600, strategy: 'maxim_evening' }
+];
+
+export const STRATEGY_LABELS: Record<Strategy, string> = {
+  maxim_morning: 'Maxim Pagi',
+  shopee_noon: 'Shopee Siang',
+  maxim_evening: 'Maxim Sore',
+  off: 'Di luar jam operasional'
+};
 
 export function getCurrentStrategy(date: Date = new Date()): Strategy {
-  const minutes = date.getHours() * 60 + date.getMinutes();
+  const seconds =
+    date.getHours() * 3600 +
+    date.getMinutes() * 60 +
+    date.getSeconds();
   for (const slot of SCHEDULE) {
-    if (minutes >= slot.start && minutes < slot.end) return slot.strategy;
+    if (seconds >= slot.start && seconds < slot.end) return slot.strategy;
   }
   return 'off';
 }

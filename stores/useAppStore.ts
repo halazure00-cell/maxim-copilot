@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import type { Profile, Transaksi, ViewState } from '../types';
 import { getProfile, getTransaksi } from '../services/mockService';
 
@@ -11,6 +11,8 @@ type AppState = {
   refresh: () => Promise<void>;
 };
 
+let refreshSeq = 0;
+
 export const useAppStore = create<AppState>((set) => ({
   currentView: 'dashboard',
   profile: null,
@@ -18,17 +20,20 @@ export const useAppStore = create<AppState>((set) => ({
   loading: true,
   setView: (view) => set({ currentView: view }),
   refresh: async () => {
+    const seq = ++refreshSeq;
     set({ loading: true });
     try {
       const [profileData, transaksiData] = await Promise.all([
         getProfile(),
         getTransaksi()
       ]);
+      if (seq !== refreshSeq) return;
       set({ profile: profileData, transaksi: transaksiData });
     } catch (error) {
+      if (seq !== refreshSeq) return;
       console.error('Gagal memuat data', error);
     } finally {
-      set({ loading: false });
+      if (seq === refreshSeq) set({ loading: false });
     }
   }
 }));

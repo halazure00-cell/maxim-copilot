@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Home, List, User, Car } from 'lucide-react';
 import { ViewState } from '../types';
 
@@ -10,8 +10,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }) => {
   return (
-    <div className="min-h-screen bg-brand-black text-gray-100 pb-24 font-sans">
-      {/* Top Bar */}
+    <div className="min-h-screen h-screen bg-brand-black text-gray-100 font-sans flex flex-col">
       <header className="sticky top-0 z-50 bg-brand-surface border-b border-brand-gray/50 px-4 py-3 flex items-center justify-between shadow-lg">
         <div className="flex items-center space-x-2">
           <div className="bg-brand-yellow p-1.5 rounded-lg text-brand-black">
@@ -24,12 +23,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }
         <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-md mx-auto p-4">
-        {children}
+      <main className="flex-1 overflow-y-auto">
+        <div className="max-w-md mx-auto p-4 pb-24">
+          {children}
+        </div>
       </main>
 
-      {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-brand-surface border-t border-brand-gray/50 pb-safe">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button
