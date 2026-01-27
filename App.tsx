@@ -1,42 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/Layout';
-import { ViewState, Profile, Transaksi } from './types';
-import { getProfile, getTransaksi } from './services/mockService';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import ProfilePage from './pages/ProfilePage';
+import { useAppStore } from './stores/useAppStore';
 
 function App() {
-  const [currentView, setView] = useState<ViewState>('dashboard');
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [transaksi, setTransaksi] = useState<Transaksi[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch initial data
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [profileData, transaksiData] = await Promise.all([
-        getProfile(),
-        getTransaksi()
-      ]);
-      setProfile(profileData);
-      setTransaksi(transaksiData);
-    } catch (error) {
-      console.error("Gagal memuat data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const currentView = useAppStore((s) => s.currentView);
+  const setView = useAppStore((s) => s.setView);
+  const profile = useAppStore((s) => s.profile);
+  const transaksi = useAppStore((s) => s.transaksi);
+  const loading = useAppStore((s) => s.loading);
+  const refresh = useAppStore((s) => s.refresh);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const refreshData = () => {
-    fetchData();
-  };
+    refresh();
+  }, [refresh]);
 
   const renderContent = () => {
     if (loading) {
@@ -56,21 +36,21 @@ function App() {
           <Dashboard 
             profile={profile} 
             transaksi={transaksi} 
-            onRefresh={refreshData}
+            onRefresh={refresh}
           />
         );
       case 'transaksi':
         return (
           <Transactions 
             transaksi={transaksi} 
-            onRefresh={refreshData} 
+            onRefresh={refresh} 
           />
         );
       case 'profil':
         return (
           <ProfilePage 
             profile={profile} 
-            onUpdate={refreshData} 
+            onUpdate={refresh} 
           />
         );
       default:

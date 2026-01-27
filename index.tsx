@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 
 // --- BAGIAN PENTING (JANGAN DIHAPUS) ---
@@ -14,6 +15,8 @@ import 'leaflet/dist/leaflet.css';
 import './index.css'; 
 
 // --- AKHIR BAGIAN PENTING ---
+
+registerSW({ immediate: true });
 
 const rootElement = document.getElementById('root');
 
