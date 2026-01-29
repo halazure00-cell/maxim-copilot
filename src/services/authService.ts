@@ -1,9 +1,12 @@
-import { supabase } from './supabaseClient'; // SALAH
-import type { SignInWithPasswordCredentials, SignUpWithPasswordCredentials, Session } from '@supabase/supabase-js';
+import { supabase } from './supabaseClient';
+import type { SignInWithPasswordCredentials, Session } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 
 // Tipe kustom untuk sign-up agar bisa menyertakan nama lengkap
-type CustomSignUpCredentials = SignUpWithPasswordCredentials & {
+// DEFINISI EKSPLISIT UNTUK MENGHINDARI MASALAH RESOLUSI TIPE DI BUILD
+type CustomSignUpCredentials = {
+  email: string;
+  password: string;
   fullName: string;
 };
 
