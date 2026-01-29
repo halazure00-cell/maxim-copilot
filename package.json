@@ -3,8 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "//": "--- TAMBAHKAN BAGIAN HOMEPAGE INI ---",
-  "homepage": "https://halazure00-cell.github.io/maxim-copilot",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
