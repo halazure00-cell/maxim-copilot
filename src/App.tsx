@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
@@ -14,8 +15,6 @@ function App() {
 
   // App data state
   const {
-    currentView,
-    setView,
     profile,
     transaksi,
     loading: isDataLoading,
@@ -65,16 +64,15 @@ function App() {
         );
     }
 
-    switch (currentView) {
-      case 'dashboard':
-        return <Dashboard profile={profile} transaksi={transaksi} onRefresh={refresh} />;
-      case 'transaksi':
-        return <Transactions transaksi={transaksi} onRefresh={refresh} />;
-      case 'profil':
-        return <ProfilePage profile={profile} onUpdate={refresh} />;
-      default:
-        return <div className="text-white">Halaman tidak ditemukan</div>;
-    }
+    return (
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard profile={profile} transaksi={transaksi} onRefresh={refresh} />} />
+        <Route path="/transaksi" element={<Transactions transaksi={transaksi} onRefresh={refresh} />} />
+        <Route path="/profil" element={<ProfilePage profile={profile} onUpdate={refresh} />} />
+        <Route path="*" element={<div className="text-white">Halaman tidak ditemukan</div>} />
+      </Routes>
+    );
   };
 
   return (
@@ -93,7 +91,7 @@ function App() {
           },
         }}
       />
-      <Layout currentView={currentView} setView={setView}>
+      <Layout>
         {renderContent()}
       </Layout>
     </>

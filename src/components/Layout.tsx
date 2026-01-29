@@ -1,67 +1,40 @@
-﻿import React from 'react';
-import { Home, List, User, Car } from 'lucide-react';
-import { ViewState } from '../types';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Home, List, User } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
-  currentView: ViewState;
-  setView: (view: ViewState) => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }) => {
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const location = useLocation();
+
+  const getLinkClass = (path: string) => {
+    const isActive = location.pathname === path;
+    return `flex flex-col items-center justify-center text-xs font-medium transition-colors duration-200 ${isActive ? 'text-maxim-yellow' : 'text-gray-400 hover:text-white'}`;
+  };
+
   return (
-    <div className="min-h-screen h-screen bg-brand-black text-gray-100 font-sans flex flex-col">
-      <header className="sticky top-0 z-50 bg-brand-surface border-b border-brand-gray/50 px-4 py-3 flex items-center justify-between shadow-lg">
-        <div className="flex items-center space-x-2">
-          <div className="bg-brand-yellow p-1.5 rounded-lg text-brand-black">
-            <Car size={20} strokeWidth={3} />
-          </div>
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            <span className="text-brand-yellow">MAXIM</span> DRIVER
-          </h1>
-        </div>
-        <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
-      </header>
+    <div className="min-h-screen bg-maxim-black">
+      <main className="pb-20">{children}</main>
 
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-md mx-auto p-4 pb-24">
-          {children}
+      {/* Bottom Navigation */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-maxim-black border-t border-zinc-700 shadow-lg">
+        <div className="grid grid-cols-3 h-16 max-w-lg mx-auto">
+          <Link to="/dashboard" className={getLinkClass('/dashboard')}>
+            <Home className="w-6 h-6 mb-1" />
+            <span>Beranda</span>
+          </Link>
+          <Link to="/transaksi" className={getLinkClass('/transaksi')}>
+            <List className="w-6 h-6 mb-1" />
+            <span>Transaksi</span>
+          </Link>
+          <Link to="/profil" className={getLinkClass('/profil')}>
+            <User className="w-6 h-6 mb-1" />
+            <span>Profil</span>
+          </Link>
         </div>
-      </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-brand-surface border-t border-brand-gray/50 pb-safe">
-        <div className="flex justify-around items-center h-16 max-w-md mx-auto">
-          <button
-            onClick={() => setView('dashboard')}
-            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-              currentView === 'dashboard' ? 'text-brand-yellow' : 'text-gray-500'
-            }`}
-          >
-            <Home size={24} strokeWidth={currentView === 'dashboard' ? 3 : 2} />
-            <span className="text-xs mt-1 font-medium">Beranda</span>
-          </button>
-          
-          <button
-            onClick={() => setView('transaksi')}
-            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-              currentView === 'transaksi' ? 'text-brand-yellow' : 'text-gray-500'
-            }`}
-          >
-            <List size={24} strokeWidth={currentView === 'transaksi' ? 3 : 2} />
-            <span className="text-xs mt-1 font-medium">Transaksi</span>
-          </button>
-          
-          <button
-            onClick={() => setView('profil')}
-            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-              currentView === 'profil' ? 'text-brand-yellow' : 'text-gray-500'
-            }`}
-          >
-            <User size={24} strokeWidth={currentView === 'profil' ? 3 : 2} />
-            <span className="text-xs mt-1 font-medium">Profil</span>
-          </button>
-        </div>
-      </nav>
+      </footer>
     </div>
   );
 };

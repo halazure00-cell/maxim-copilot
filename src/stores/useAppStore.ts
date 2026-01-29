@@ -1,24 +1,20 @@
 import { create } from 'zustand';
-import type { Profile, Transaksi, ViewState } from '../types'; // SALAH
+import type { Profile, Transaksi } from '../types'; // SALAH
 import { getProfile, getTransaksi } from '../services/mockService';
 
 type AppState = {
-  currentView: ViewState;
   profile: Profile | null;
   transaksi: Transaksi[];
   loading: boolean;
-  setView: (view: ViewState) => void;
   refresh: () => Promise<void>;
 };
 
 let refreshSeq = 0;
 
 export const useAppStore = create<AppState>((set) => ({
-  currentView: 'dashboard',
   profile: null,
   transaksi: [],
   loading: true,
-  setView: (view) => set({ currentView: view }),
   refresh: async () => {
     const seq = ++refreshSeq;
     set({ loading: true });

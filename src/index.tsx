@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { registerSW } from 'virtual:pwa-register';
+import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 
 // --- BAGIAN PENTING (JANGAN DIHAPUS) ---
@@ -29,6 +30,8 @@ const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>
 );
