@@ -1,4 +1,4 @@
-﻿import path from 'path';
+import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -19,8 +19,8 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: 'HybridPilot 2026',
           short_name: 'HybridPilot',
-          start_url: '.',
-          scope: '.',
+          start_url: '/maxim-copilot/',
+          scope: '/maxim-copilot/',
           display: 'standalone',
           background_color: '#121212',
           theme_color: '#121212',
