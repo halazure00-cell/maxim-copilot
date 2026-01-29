@@ -79,7 +79,7 @@ const Transactions: React.FC<TransactionsProps> = ({ transaksi, onRefresh }) => 
                 : 'text-gray-500 hover:text-gray-300'
             }`}
           >
-            {f === 'all' ? 'Semua' : f === 'masok' ? 'Pemasukan' : 'Pengeluaran'}
+            {f === 'all' ? 'Semua' : f === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}
           </button>
         ))}
       </div>

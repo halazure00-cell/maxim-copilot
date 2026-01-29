@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Profile } from '../types';
 import { updateProfile } from '../services/mockService';
+import { signOut } from '../services/authService';
 import { User, Shield, Phone, Save, LogOut } from 'lucide-react';
 
 interface ProfilePageProps {
@@ -133,7 +134,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdate }) => {
         </div>
       </div>
 
-      <button className="w-full py-4 rounded-xl border border-red-500/30 text-red-500 font-bold flex items-center justify-center hover:bg-red-500/10 transition-colors mt-8">
+      <button onClick={signOut} className="w-full py-4 rounded-xl border border-red-500/30 text-red-500 font-bold flex items-center justify-center hover:bg-red-500/10 transition-colors mt-8">
         <LogOut size={20} className="mr-2" />
         Keluar Aplikasi
       </button>

@@ -1,37 +1,41 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: [
     "./index.html",
-    "./index.tsx",
-    "./App.tsx",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./services/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        mono: ['Roboto Mono', 'monospace'],
       },
       colors: {
-        // Maxim Brand Colors
-        maxim: {
-          yellow: '#FEEC00',
-          black: '#121212',
-          card: '#1E1E1E',
-          text: '#FFFFFF',
-          muted: '#A1A1AA'
-        },
-        // Backward compatibility aliases
         brand: {
-          yellow: '#FEEC00',
-          black: '#121212',
-          gray: '#2A2A2A',
-          surface: '#1E1E1E'
-        }
-      }
-    }
+          black:   '#121212',
+          surface: '#1E1E1E',
+          gray:    '#3A3A3A', // Darker for better contrast
+          yellow:  '#FFCC00', // Slightly desaturated for a modern feel
+          
+          // Semantic colors
+          background: '#121212',
+          foreground: '#FFFFFF',
+          card:       '#1E1E1E',
+          primary:    '#FFCC00',
+          secondary:  '#3A3A3A',
+          accent:     '#007AFF', // Example accent color
+        },
+      },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.5s ease-out forwards',
+      },
+    },
   },
   plugins: [],
 }
