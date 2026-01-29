@@ -1,38 +1,43 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { signIn, signUp } from '../services/authService';
-import { ShieldCheck, LogIn } from 'lucide-react';
+import { ShieldCheck, LogIn, UserPlus } from 'lucide-react';
 
 type AuthMode = 'signIn' | 'signUp';
 
 const AuthPage: React.FC = () => {
   const [mode, setMode] = useState<AuthMode>('signIn');
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmit = async (formData: any) => {
     setIsLoading(true);
     try {
       if (mode === 'signIn') {
         await signIn({ email: formData.email, password: formData.password });
-        // State global akan menangani redirect
+        // State global akan menangani redirect otomatis.
       } else {
-        await signUp({ email: formData.email, password: formData.password });
-        setMode('signIn'); // Arahkan ke login setelah sukses daftar
+        await signUp({ 
+          email: formData.email, 
+          password: formData.password, 
+          fullName: formData.fullName 
+        });
+        // Setelah sign up berhasil, user auto-login. State global akan redirect.
       }
     } catch (error) {
-      // Notifikasi toast sudah dihandle di authService
+      // Notifikasi toast untuk error sudah dihandle di dalam authService.
     } finally {
       setIsLoading(false);
     }
   };
 
   const toggleMode = () => {
+    reset(); // Reset form state saat berganti mode
     setMode(prev => prev === 'signIn' ? 'signUp' : 'signIn');
   };
 
   return (
-    <div className="min-h-screen bg-maxim-black flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#121212] flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <ShieldCheck className="w-16 h-16 mx-auto text-maxim-yellow" />
@@ -40,7 +45,18 @@ const AuthPage: React.FC = () => {
           <p className="text-zinc-400">{mode === 'signIn' ? 'Masuk untuk melanjutkan' : 'Buat akun baru'}</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {mode === 'signUp' && (
+            <div>
+              <input 
+                {...register('fullName', { required: 'Nama lengkap tidak boleh kosong' })} 
+                type="text" 
+                placeholder="Nama Lengkap"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-maxim-yellow"
+              />
+              {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message as string}</p>}
+            </div>
+          )}
           <div>
             <input 
               {...register('email', { required: 'Email tidak boleh kosong' })} 
@@ -67,7 +83,7 @@ const AuthPage: React.FC = () => {
           >
             {isLoading 
               ? <><div className="w-5 h-5 border-2 border-t-transparent border-black rounded-full animate-spin"></div> Memproses...</> 
-              : <><LogIn size={18} /> {mode === 'signIn' ? 'Masuk' : 'Daftar'}</> 
+              : (mode === 'signIn' ? <><LogIn size={18} /> Masuk</> : <><UserPlus size={18} /> Daftar</>)
             }
           </button>
         </form>
