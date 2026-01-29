@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Transaksi } from '../types';
+import { Transaksi } from '../types'; // SALAH
 import { addTransaksi } from '../services/mockService';
 import { PlusCircle, ArrowDownLeft, ArrowUpRight, Filter } from 'lucide-react';
 

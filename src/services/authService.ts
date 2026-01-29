@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabase } from './supabaseClient'; // SALAH
 import type { SignInWithPasswordCredentials, SignUpWithPasswordCredentials, Session } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 

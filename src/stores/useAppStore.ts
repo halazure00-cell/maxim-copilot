@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Profile, Transaksi, ViewState } from '../types';
+import type { Profile, Transaksi, ViewState } from '../types'; // SALAH
 import { getProfile, getTransaksi } from '../services/mockService';
 
 type AppState = {
