@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Transaksi } from '../types'; // SALAH
+import { Transaksi } from '../types';
 import { addTransaksi } from '../services/mockService';
 import { PlusCircle, ArrowDownLeft, ArrowUpRight, Filter } from 'lucide-react';
 
@@ -79,7 +79,7 @@ const Transactions: React.FC<TransactionsProps> = ({ transaksi, onRefresh }) => 
                 : 'text-gray-500 hover:text-gray-300'
             }`}
           >
-            {f === 'all' ? 'Semua' : f === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}
+            {f === 'all' ? 'Semua' : f === 'masok' ? 'Pemasukan' : 'Pengeluaran'}
           </button>
         ))}
       </div>

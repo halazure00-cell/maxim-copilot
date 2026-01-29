@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Profile } from '../types'; // SALAH
+import { Profile } from '../types';
 import { updateProfile } from '../services/mockService';
 import { User, Shield, Phone, Save, LogOut } from 'lucide-react';
 

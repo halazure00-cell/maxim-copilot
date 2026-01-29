@@ -1,4 +1,4 @@
-﻿export type Strategy = 'maxim_morning' | 'shopee_noon' | 'maxim_evening' | 'off';
+export type Strategy = 'maxim_morning' | 'shopee_noon' | 'maxim_evening' | 'off';
 
 type ScheduleSlot = { start: number; end: number; strategy: Strategy };
 

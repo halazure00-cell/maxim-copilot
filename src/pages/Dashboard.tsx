@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { toast } from 'react-hot-toast';
-import { Profile, Transaksi } from '../types'; // SALAH
+import { Profile, Transaksi } from '../types'; 
 import { TrendingUp, Wallet, AlertTriangle, ChevronRight, MapPin } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { getCurrentStrategy, STRATEGY_LABELS } from '../services/schedule';
